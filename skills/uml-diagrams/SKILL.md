@@ -1,9 +1,9 @@
 ---
-name: tikz-diagrams
+name: uml-diagrams
 description: Use when creating or editing LaTeX/TikZ UML diagrams for Markdown documentation, including sequence, activity, state machine, class, component, deployment and use case diagrams, or related software architecture views.
 ---
 
-# TikZ Diagrams
+# UML Diagrams
 
 Create diagram assets for Markdown: editable TikZ source plus a rendered SVG or PNG for embedding, and a vector PDF when compilation supports it. Preserve the requested diagram type, model, detail and final reading size. A diagram request does not require a prose LaTeX document.
 

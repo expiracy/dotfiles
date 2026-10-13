@@ -26,7 +26,7 @@ do not present unrun checks as verified.
 
 ## Diagrams
 
-For TikZ diagrams, apply `tikz-diagrams`: reuse a consistent theme, preserve the
+For TikZ diagrams, apply `uml-diagrams`: reuse a consistent theme, preserve the
 requested relationships, and check the rendered diagram for readable text,
 unintended overlaps, unclear connectors, and clipping.
 
