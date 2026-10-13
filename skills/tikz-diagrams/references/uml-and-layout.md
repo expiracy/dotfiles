@@ -1,8 +1,38 @@
 # UML notation and TikZ layout
 
-Use the template's common `uml/` styles. Preserve the requested model and its
-semantics while adapting the layout. These are practical defaults, not a complete
-UML specification or a guarantee of automatic layout.
+Reuse the shared preamble and `uml/` styles in the template for every diagram type. Copy them into self-contained generated assets. Preserve model semantics while adapting layout; these practical defaults do not replace the UML specification or provide automatic layout.
+
+## Diagram types
+
+These are the supported UML views for ordinary software documentation. The skill's scenario table selects the view; this table specifies its notation. Consult UML 2.5.1 for specialised constructs within these views.
+
+| Type | Required distinction and canonical primitives |
+|------|-----------------------------------------------|
+| Sequence | Lifelines, ordered messages, executions and fragments; `uml/lifeline-head`, `uml/lifeline`, call/reply styles, `uml/activation`, frame geometry. |
+| Activity | Actions, flows, decisions, concurrency and finals; `uml/action`, `uml/control-flow`, `uml/decision`, `uml/bar`, final styles. |
+| State machine | States and event-driven transitions; `uml/state`, `uml/transition`, initial/final nodes. |
+| Class | Classifiers, compartments and typed relationships; `uml/class`. |
+| Component | Components and their interfaces/dependencies; `uml/component` with the component keyword or icon. |
+| Deployment | Perspective node cubes, artifacts and deployment; themed edges and `uml/artifact`. |
+| Use case | Actor roles, named ellipses and subject boundary; `uml/actor` pic, `uml/usecase`, `uml/frame`. |
+
+Source: [OMG UML 2.5.1](https://www.omg.org/spec/UML/2.5.1/PDF).
+
+## Deployment
+
+Deployment nodes are perspective cubes, labelled with the applicable device or execution-environment keyword. Artifacts can be keyword-labelled rectangles or document icons. Nest them within their deployment target, or draw an explicit dashed/open deploy dependency from artifact to target. Communication paths between nodes are solid associations; a manifest dependency points from artifact to its manifested classifier/component.
+
+Source: UML 2.5.1 §§19.2.4–19.4.4.
+
+## Use cases, activities and state machines
+
+Use an actor stick figure (`\pic (user) {uml/actor};`) or actor-keyword rectangle. The pic exposes `user-north`, `user-south`, `user-east` and `user-west` coordinates; position its text label separately. Use-case names belong inside ellipses. Actor associations are solid; include points from base to included use case, and extend from extending to extended use case, both dashed/open with their keywords. These relationships do not express execution order.
+
+Activities use rounded actions, rectangular object nodes/pins, decision/merge diamonds and fork/join bars. `uml/control-flow` and `uml/object-flow` have solid open heads. Label decision guards `[condition]`; decisions select alternatives while forks create concurrent flows. `uml/initial` is a filled circle; `uml/activity-final` is a bull's-eye stopping all flows; `uml/flow-final` is a circled X terminating only that flow.
+
+State-machine transitions use `trigger [guard] / effect`; rounded state nodes may have entry/do/exit behaviour. A final bull's-eye completes its enclosing region. Nested states and dashed region dividers express hierarchy and concurrency. An initial node, state and activity action may share visual primitives but retain different semantics.
+
+Sources: UML 2.5.1 §§14.2.4, 15.2.4–15.3.4 and 18.1.4.
 
 ## Relationship direction and meaning
 
@@ -14,7 +44,9 @@ UML specification or a guarantee of automatic layout.
 | Interface realization | `uml/realization` | Dashed line and hollow triangle, from implementation to interface. |
 | Shared aggregation | `uml/aggregation` | Hollow diamond at the whole end; use only when that relationship is intended. |
 | Composition | `uml/composition` | Filled diamond at the whole end; composition expresses stronger whole/part semantics. |
-| Annotation | `uml/note-link` | Dashed connector without an arrowhead; does not create a model relationship. |
+| Annotation | `uml/note-link` | Dashed connector without an arrowhead; formal comments use the folded-corner `uml/note`. |
+| Activity control/object flow | `uml/control-flow` / `uml/object-flow` | Solid open-head flow with the supplied guard/token meaning. |
+| State transition | `uml/transition` | Solid open head; label with trigger, guard and effect when supplied. |
 
 The template's aggregation and composition styles put the diamond at the start
 of the path: draw from the whole toward the part. Draw generalizations and
@@ -78,20 +110,24 @@ Sources: [Positioning and labels](https://tikz.dev/tikz-shapes),
 [path bends](https://tikz.dev/tikz-paths), [fit](https://tikz.dev/library-fit),
 and [background layers](https://tikz.dev/library-backgrounds).
 
-## Components and sequences
+## Components
 
-For components, use `uml/component` with a visible component stereotype or correct
-UML notation; do not invent an icon that suggests a different kind of entity.
+For components, use `uml/component` with a visible component keyword or correct
+UML icon; do not invent an icon that suggests a different kind of entity.
 Use the same typography, colours, padding, and relationship conventions as the
 class diagrams. An informal block diagram should be identified as such.
 
-For sequences, align participant headers and use `uml/lifeline` for vertical
+The interface and component labels are UML keywords, not profile stereotypes. Use T1 guillemets (`\guillemotleft` / `\guillemotright`) around keywords and stereotype names.
+
+## Sequence diagrams
+
+Use `uml/lifeline-head` for participant headers and `uml/lifeline` for vertical
 lifelines. Allocate increasing event rows and space for each message label.
 Use `uml/call` for synchronous calls and `uml/async` for asynchronous calls.
 The template convention is `uml/reply` for dashed, open-barb replies; label
 messages and keep self-calls and activation bars clear of neighbouring lifelines.
 
-Sequence time flows downward. Preserve requested call order and distinguish
+Sequence time flows downward. Use the UML pentagonal heading tab for the outer `sd` frame and combined fragments; preserve supplied fragment operators and guards. Preserve requested call order and distinguish
 simultaneous or asynchronous behaviour from a synchronous call. For formal UML,
 use its actual notation for combined fragments and activation bars rather than
 implying those meanings through arbitrary boxes or colours.
@@ -115,7 +151,7 @@ pdftoppm -png -r 150 -singlefile build/diagram.pdf build/diagram
 
 An existing editor/preview or a compatible LaTeX engine can provide the same
 compile-and-inspect loop. Do not enable shell escape for the supplied template.
-Keep build outputs separate from source. Re-render after source changes and
+Keep intermediate build files separate from source. Retain a chosen SVG/PNG preview beside the editable source for Markdown embedding, plus the vector PDF when useful. Existing PDF-to-SVG or PDF-to-PNG tools can provide the preview; no prose LaTeX report is needed. Re-render after source changes and
 inspect the actual latest image; warnings alone cannot detect hyphenated names,
 incorrect arrow semantics, or overlapping annotations.
 

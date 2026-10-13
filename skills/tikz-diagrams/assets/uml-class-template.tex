@@ -2,7 +2,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,calc,shapes.multipart}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.multipart,shapes.geometric,fit,backgrounds}
 
 \definecolor{umlInk}{HTML}{263445}
 \definecolor{umlAccent}{HTML}{285B80}
@@ -19,7 +19,20 @@
     rectangle split part align={center,left,left},
     text width=42mm,align=center},
   uml/component/.style={uml/base,rectangle,fill=umlHeader,text width=42mm,align=center},
-  uml/note/.style={uml/base,rectangle,fill=umlNote,text width=83mm,align=left},
+  uml/note/.style={uml/base,rectangle,draw=none,fill=none,
+    text width=83mm,align=left,inner ysep=4mm,
+    path picture={
+      \path[draw=umlInk,fill=umlNote,line width=0.65pt]
+        (path picture bounding box.south west) --
+        (path picture bounding box.north west) --
+        ([xshift=-3mm]path picture bounding box.north east) --
+        ([yshift=-3mm]path picture bounding box.north east) --
+        (path picture bounding box.south east) -- cycle;
+      \draw[draw=umlInk,line width=0.65pt]
+        ([xshift=-3mm]path picture bounding box.north east) --
+        ([xshift=-3mm,yshift=-3mm]path picture bounding box.north east) --
+        ([yshift=-3mm]path picture bounding box.north east);
+    }},
   uml/label/.style={font=\sffamily\footnotesize,text=umlInk,
     inner sep=1.5pt,fill=white},
   uml/edge/.style={draw=umlInk,line width=0.65pt},
@@ -33,13 +46,54 @@
   uml/lifeline/.style={uml/edge,densely dashed},
   uml/call/.style={uml/edge,-{Triangle[length=3mm,width=2.2mm]}},
   uml/async/.style={uml/edge,-{Straight Barb[length=3mm,width=2mm]}},
-  uml/reply/.style={uml/edge,dashed,-{Straight Barb[length=3mm,width=2mm]}}
+  uml/reply/.style={uml/edge,dashed,-{Straight Barb[length=3mm,width=2mm]}},
+  uml/artifact/.style={uml/base,rectangle,fill=white,text width=32mm,align=center},
+  uml/frame/.style={uml/base,rectangle,fill=none,inner sep=7mm},
+  uml/port/.style={uml/base,rectangle,fill=white,minimum size=3mm,inner sep=0pt},
+  uml/interface/.style={uml/base,circle,fill=white,minimum size=4mm,inner sep=0pt},
+  uml/usecase/.style={uml/base,ellipse,fill=umlHeader,text width=32mm,align=center},
+  uml/action/.style={uml/base,rectangle,rounded corners=2mm,
+    fill=umlHeader,text width=32mm,align=center},
+  uml/state/.style={uml/base,rectangle,rounded corners=2mm,
+    fill=umlHeader,text width=32mm,align=center},
+  uml/decision/.style={uml/base,diamond,fill=white,aspect=1.4,
+    minimum size=8mm,inner sep=1pt},
+  uml/bar/.style={uml/base,rectangle,fill=umlInk,
+    minimum width=25mm,minimum height=1.8mm,inner sep=0pt},
+  uml/initial/.style={uml/base,circle,fill=umlInk,minimum size=4mm,inner sep=0pt},
+  uml/activity-final/.style={uml/base,circle,fill=white,minimum size=6mm,
+    inner sep=0pt,path picture={
+      \fill[umlInk] (path picture bounding box.center) circle[radius=1.6mm];}},
+  uml/flow-final/.style={uml/base,circle,fill=white,minimum size=6mm,
+    inner sep=0pt,path picture={
+      \draw[draw=umlInk,line width=0.65pt]
+        ([xshift=-1.7mm,yshift=-1.7mm]path picture bounding box.center) --
+        ([xshift=1.7mm,yshift=1.7mm]path picture bounding box.center)
+        ([xshift=-1.7mm,yshift=1.7mm]path picture bounding box.center) --
+        ([xshift=1.7mm,yshift=-1.7mm]path picture bounding box.center);}},
+  uml/lifeline-head/.style={uml/base,rectangle,fill=umlHeader,
+    text width=42mm,align=center},
+  uml/activation/.style={uml/base,rectangle,fill=umlHeader,
+    minimum width=3mm,minimum height=12mm,inner sep=0pt},
+  uml/control-flow/.style={uml/edge,-{Straight Barb[length=3mm,width=2mm]}},
+  uml/object-flow/.style={uml/control-flow},
+  uml/transition/.style={uml/control-flow},
+  pics/uml/actor/.style={code={
+    \draw[uml/edge,fill=white] (0,0.42) circle[radius=1.3mm];
+    \draw[uml/edge] (0,0.29) -- (0,-0.22)
+      (-0.28,0.14) -- (0.28,0.14)
+      (0,-0.22) -- (-0.24,-0.53) (0,-0.22) -- (0.24,-0.53);
+    \coordinate (-north) at (0,0.55);
+    \coordinate (-south) at (0,-0.53);
+    \coordinate (-west) at (-0.3,0);
+    \coordinate (-east) at (0.3,0);
+  }}
 }
 
 \begin{document}
 \begin{tikzpicture}
 \node[uml/class] (gateway) {
-  {\footnotesize\normalfont\sffamily\textless\textless interface\textgreater\textgreater}\\
+  {\footnotesize\normalfont\sffamily\guillemotleft interface\guillemotright}\\
   \textbf{PaymentGateway}
   \nodepart[align=left]{two}\strut
   \nodepart[align=left]{three}

@@ -1,69 +1,55 @@
 ---
 name: tikz-diagrams
-description: Use when creating or editing UML-style or software architecture diagrams with LaTeX/TikZ, especially class, component, and sequence diagrams that need consistent styling, readable labels, and carefully checked spacing and connector routes.
+description: Use when creating or editing LaTeX/TikZ UML diagrams for Markdown documentation, including sequence, activity, state machine, class, component, deployment and use case diagrams, or related software architecture views.
 ---
 
 # TikZ Diagrams
 
-Create clear, consistent diagrams and verify the rendered result. Deliver editable
-TikZ source and a vector PDF when compilation is available. Follow the requested
-diagram type, level of detail, page size, and existing document style.
+Create diagram assets for Markdown: editable TikZ source plus a rendered SVG or PNG for embedding, and a vector PDF when compilation supports it. Preserve the requested diagram type, model, detail and final reading size. A diagram request does not require a prose LaTeX document.
 
-## Start with the meaning
+## Choose the UML view
 
-Identify the entities, relationships, arrow directions, labels, and multiplicities
-the diagram must show. Preserve supplied names and facts. Mark illustrative
-choices or unresolved relationships; do not invent ownership, cardinalities,
-failure policies, or security requirements to fill space.
+Support these seven common views. Choose one that answers the document's question:
 
-Choose formal UML notation when requested. For an informal architecture diagram,
-use the appropriate UML-inspired visual language without claiming full UML compliance.
+| Scenario or question | Diagram |
+|----------------------|---------|
+| Who calls whom, in what order, during one request or interaction? | **Sequence** |
+| What steps, decisions and parallel branches form a workflow? | Activity |
+| How does one entity change state in response to events? | State machine |
+| What types, fields, operations and structural relationships exist? | Class |
+| What subsystems, interfaces and dependencies form the software? | Component |
+| What runs where, across hosts and execution environments? | Deployment |
+| Which actors pursue which goals through the system? | Use case |
 
-## Reuse one visual style
+For an explicit supported type, use it. Otherwise select the best view and briefly state why. Sequence shows exchanges between participants; activity shows the process; state machine shows one entity's lifecycle. Component shows software organisation; deployment shows runtime placement. Use case shows goals, not execution order. Draw one focused view unless the request needs several; ask when the intended question is unclear. For a requested type outside this set, explain the supported scope and ask about a suitable supported view rather than silently substituting.
 
-Start from [the standalone template](assets/uml-class-template.tex) and its
-central `uml/` style block. Replace the example content with the requested model.
-Keep the same typography, palette, stroke widths, padding, and arrow sizes across
-related diagrams. Change shared styles when adapting a theme rather than styling
-every node independently. [The preview](assets/uml-class-preview.png) shows the
-default appearance.
+Consult the [notation table](references/uml-and-layout.md#diagram-types) for the selected view. Use formal UML notation for UML requests; label informal architecture views as informal.
 
-Use aligned rows or columns, consistent box widths, muted fills, and clear dark
-text. The template uses a 10pt body and 9pt labels at natural size. Keep text
-readable at the final embedding size; reflow or simplify the diagram before
-shrinking it. Use shape and line conventions as well as colour to convey meaning.
+Identify supplied entities, relationships, direction, multiplicity, message order, guards and timing. Preserve names and facts. Mark illustrative choices or unresolved relationships; ask when missing semantics affect correctness. Do not infer ownership from pointer types or invent timing, cardinalities or failure policies.
 
-## Lay out boxes, then routes
+## Reuse the canonical theme
 
-1. Set the intended canvas and reading direction. Place the main nodes using
-   positioning relative to their borders or named row/column coordinates.
-2. Reserve whitespace for notes, labels, arrowheads, and routing corridors.
-   Start with 12–20mm horizontal gaps and 20–26mm between class rows; adjust to
-   actual rendered content. Long boxes need larger gaps or a different arrangement.
-3. Set text widths and deliberate line breaks. Keep identifiers intact; break a
-   long field or signature at meaningful boundaries. For rectangle-split classes,
-   use the `two` and `three` compartments, not `second` and `third`.
-4. Connect explicit border anchors through clear lanes and named waypoints.
-   Place labels on a chosen straight segment and multiplicities beside the
-   correct endpoints. Keep routes clear of unrelated boxes and annotations.
+The shared preamble and `uml/` style block in [the template](assets/uml-class-template.tex) are the canonical visual source for every type. Copy those definitions into a self-contained diagram, then replace the class-example body with the requested view's appropriate glyphs. [The preview](assets/uml-class-preview.png) shows the theme.
 
-Relative positioning and `-|`/`|-` bends do not provide automatic collision
-avoidance. Read [UML and layout details](references/uml-and-layout.md) for arrow
-semantics, components, sequences, grouping, and crowded layouts.
+Keep its blue/grey palette, sans-serif typography, 0.65 pt strokes, padding and arrow proportions consistent across diagrams. Use the existing class, component, action, state, actor, lifeline, interface, frame and final-node primitives. Deployment cube faces and sequence frame headings use normal TikZ geometry with the same styles. Correct UML notation takes precedence over making every symbol look like a class box.
 
-## Compile, inspect, revise
+The default body is 10pt and labels 9pt at natural size. Reflow or simplify before shrinking text; check the final Markdown embedding width. The theme is a local visual convention, not an OMG-mandated colour scheme.
 
-Use the available LaTeX compiler and preview, or the reference's command-line
-workflow. Check errors, missing glyphs, and overfull boxes, then render the PDF.
-Inspect the entire diagram at its intended reading size and enlarge dense areas.
+## Place symbols, then route connectors
 
-Check node and note separation; complete compartment text; intact identifiers;
-label collisions; arrowheads and multiplicity placement; paths through unrelated
-boxes, including paths hidden behind fills; and page margins or clipping.
-Correct defects in the source, then compile and inspect the latest render again.
-Compilation success alone is not a layout check.
+1. Set canvas, reading direction and meaningful event/time order. Align related nodes and reserve lanes for routes, notes and labels.
+2. Set widths and deliberate line breaks. Use border-relative positioning and size the next row from actual content. Start with 12–20mm horizontal gaps and 20–26mm between class rows, then adjust.
+3. Use the relationship and flow styles for their actual meaning. Keep open activity-flow heads, final symbols, lifeline headings and message arrowheads distinct. Distinguish standard UML keywords from defined stereotypes; use plain explanatory text for other connector labels.
+4. Connect explicit anchors through clear waypoints. Place labels on straight segments and multiplicities beside the endpoints they count. Check self-calls, nested frames, group boundaries and underlying paths.
 
-Deliver only after this visual check finds no unintended overlaps. Report the
-checks actually performed. If compilation or visual inspection is unavailable,
-preserve the source and provide verification instructions; label the layout
-unverified and do not claim it is overlap-free.
+TikZ bends and positioning do not automatically avoid collisions. [The reference](references/uml-and-layout.md) covers compartments, groups, arrows and type-specific geometry.
+
+## Compile, inspect, deliver
+
+Prefer an available native LaTeX source editor/compiler for standalone diagram editing and diagnostics. Use the existing [command-line workflow](references/uml-and-layout.md#portable-build-and-visual-check) when rendered asset files are needed and native export is unavailable. Native standalone compilation needs a self-contained source. Installing a toolchain is outside an ordinary diagram request.
+
+Check compilation diagnostics, missing glyphs and overfull boxes. Render and inspect the entire diagram at its intended size, then enlarge dense areas. Verify notation, arrowheads, complete text, labels, borders, connectors and clipping. Correct the source and re-render after changes; compilation alone is not a layout check.
+
+In Vault, follow its guide: keep feature assets in `features/assets/<feature-id>/`, task-only assets in that task's `assets/`, and existing media at their current paths. Embed the SVG/PNG using a relative Markdown image link and retain the `.tex` source beside it. Do not turn the Markdown document into a LaTeX report.
+
+Report source and preview paths, actual compile/render checks and limitations. If compilation, export or inspection is unavailable, preserve the source and label the missing scope unverified rather than claiming a checked image.

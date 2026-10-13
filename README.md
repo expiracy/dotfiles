@@ -11,7 +11,8 @@ provider-neutral; the files under [home/](home/) adapt it to local agent paths.
 - [Canon TDD](skills/canon-tdd/SKILL.md): scenario-driven test-first development.
 - [Writing Style](skills/writing-style/SKILL.md): clear, direct prose that preserves meaning.
 - [Document Writing](skills/doc-writing/SKILL.md): high-level explanations with a clear narrative and the detail the reader needs.
-- [TikZ Diagrams](skills/tikz-diagrams/SKILL.md): consistent UML-style diagrams with checked spacing, labels, and connector routes.
+- [TikZ Diagrams](skills/tikz-diagrams/SKILL.md): seven common UML views, scenario-based selection and one canonical theme, with editable TikZ sources and rendered Markdown previews.
+- [Vault Documentation Style](skills/vault-doc-style/SKILL.md): Vault's formal, concise documentation style, with metadata, change states and historical records preserved.
 
 ## What chezmoi manages
 
