@@ -19,10 +19,8 @@ Make the smallest complete change that solves the requested problem. Follow the
 project's existing conventions, public contracts, language version, and error
 policy. Avoid unrelated cleanup and speculative abstractions.
 
-For C++ work, apply `cpp-style`, including explicit ownership, borrowing, and
-lifetime contracts. For executable behavior changes, apply `canon-tdd` with one
-scenario at a time. Run meaningful project checks and report actual results;
-do not present unrun checks as verified.
+Run meaningful project checks and report actual results; do not present unrun
+checks as verified.
 
 ## Diagrams
 

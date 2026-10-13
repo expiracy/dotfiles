@@ -89,6 +89,9 @@ Legacy `right of=A`, explicit centre coordinates, and `on grid` can give very
 different spacing. Align row tops with common coordinates when node heights differ.
 Choose the next row from the tallest relevant box, not an assumed fixed height.
 
+Start with 12–20mm horizontal gaps and 20–26mm between class rows, then adjust
+to the rendered content. Set widths and deliberate line breaks before routing.
+
 `-|` goes horizontally then vertically; `|-` goes vertically then horizontally.
 Neither searches for obstacles. Select departure/arrival anchors that match the
 path direction and add explicit waypoints or offset lanes for congested routes.

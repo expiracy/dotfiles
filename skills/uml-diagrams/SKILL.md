@@ -5,51 +5,38 @@ description: Use when creating or editing LaTeX/TikZ UML diagrams for Markdown d
 
 # UML Diagrams
 
-Create diagram assets for Markdown: editable TikZ source plus a rendered SVG or PNG for embedding, and a vector PDF when compilation supports it. Preserve the requested diagram type, model, detail and final reading size. A diagram request does not require a prose LaTeX document.
+Create Markdown diagram assets: editable TikZ source, an SVG or PNG preview, and a vector PDF when available.
 
-## Choose the UML view
+## Choose the view
 
-Support these seven common views. Choose one that answers the document's question:
+Support these seven common views:
 
-| Scenario or question | Diagram |
-|----------------------|---------|
-| Who calls whom, in what order, during one request or interaction? | **Sequence** |
-| What steps, decisions and parallel branches form a workflow? | Activity |
-| How does one entity change state in response to events? | State machine |
-| What types, fields, operations and structural relationships exist? | Class |
-| What subsystems, interfaces and dependencies form the software? | Component |
-| What runs where, across hosts and execution environments? | Deployment |
-| Which actors pursue which goals through the system? | Use case |
+| Scenario | Diagram |
+|----------|---------|
+| Ordered messages between participants | **Sequence** |
+| Workflow steps, decisions and parallel branches | Activity |
+| One entity's states and event-driven transitions | State machine |
+| Types, fields, operations and relationships | Class |
+| Subsystems, interfaces and dependencies | Component |
+| Runtime placement on hosts and execution environments | Deployment |
+| Actors and their goals within a system boundary | Use case |
 
-For an explicit supported type, use it. Otherwise select the best view and briefly state why. Sequence shows exchanges between participants; activity shows the process; state machine shows one entity's lifecycle. Component shows software organisation; deployment shows runtime placement. Use case shows goals, not execution order. Draw one focused view unless the request needs several; ask when the intended question is unclear. For a requested type outside this set, explain the supported scope and ask about a suitable supported view rather than silently substituting.
+Honour an explicitly requested supported type; otherwise choose a view and briefly explain why. Draw one focused view unless several are needed. Ask when the question is unclear or the requested type is outside this set. Label informal architecture views as informal.
 
-Consult the [notation table](references/uml-and-layout.md#diagram-types) for the selected view. Use formal UML notation for UML requests; label informal architecture views as informal.
-
-Identify supplied entities, relationships, direction, multiplicity, message order, guards and timing. Preserve names and facts. Mark illustrative choices or unresolved relationships; ask when missing semantics affect correctness. Do not infer ownership from pointer types or invent timing, cardinalities or failure policies.
+Preserve supplied names, relationships, directions, multiplicities, message order, guards and timing. Mark illustrative assumptions; ask when missing semantics affect correctness. Do not infer ownership from pointer types or invent timing, cardinalities or failure policies.
 
 ## Reuse the canonical theme
 
-The shared preamble and `uml/` style block in [the template](assets/uml-class-template.tex) are the canonical visual source for every type. Copy those definitions into a self-contained diagram, then replace the class-example body with the requested view's appropriate glyphs. [The preview](assets/uml-class-preview.png) shows the theme.
+Copy the shared preamble and `uml/` styles from [the template](assets/uml-class-template.tex) into self-contained source and replace its example body. Keep the blue/grey palette, sans-serif type, 0.65pt strokes, 10pt body and 9pt labels. [The preview](assets/uml-class-preview.png) shows the theme.
 
-Keep its blue/grey palette, sans-serif typography, 0.65 pt strokes, padding and arrow proportions consistent across diagrams. Use the existing class, component, action, state, actor, lifeline, interface, frame and final-node primitives. Deployment cube faces and sequence frame headings use normal TikZ geometry with the same styles. Correct UML notation takes precedence over making every symbol look like a class box.
+Use the correct UML symbols for the view. Read [the reference](references/uml-and-layout.md) for its notation and relevant compartment, arrow or layout details. Reserve space for labels and connector routes; reflow before shrinking text.
 
-The default body is 10pt and labels 9pt at natural size. Reflow or simplify before shrinking text; check the final Markdown embedding width. The theme is a local visual convention, not an OMG-mandated colour scheme.
+## Compile and deliver
 
-## Place symbols, then route connectors
+Prefer an available native source editor/compiler. Use the [existing command-line workflow](references/uml-and-layout.md#portable-build-and-visual-check) when rendered asset export requires it. Do not install a toolchain for an ordinary diagram request.
 
-1. Set canvas, reading direction and meaningful event/time order. Align related nodes and reserve lanes for routes, notes and labels.
-2. Set widths and deliberate line breaks. Use border-relative positioning and size the next row from actual content. Start with 12–20mm horizontal gaps and 20–26mm between class rows, then adjust.
-3. Use the relationship and flow styles for their actual meaning. Keep open activity-flow heads, final symbols, lifeline headings and message arrowheads distinct. Distinguish standard UML keywords from defined stereotypes; use plain explanatory text for other connector labels.
-4. Connect explicit anchors through clear waypoints. Place labels on straight segments and multiplicities beside the endpoints they count. Check self-calls, nested frames, group boundaries and underlying paths.
+Compile and check errors, missing glyphs and overfull boxes. Render and inspect at the intended Markdown width for notation, complete text, labels, connectors, overlaps and clipping. Fix the source and re-render after changes; compilation alone does not verify layout.
 
-TikZ bends and positioning do not automatically avoid collisions. [The reference](references/uml-and-layout.md) covers compartments, groups, arrows and type-specific geometry.
+Keep existing asset paths. In Vault, use `features/assets/<feature-id>/` for new feature assets and the task's `assets/` for task-only media. Embed previews with relative Markdown image links and keep `.tex` source beside them.
 
-## Compile, inspect, deliver
-
-Prefer an available native LaTeX source editor/compiler for standalone diagram editing and diagnostics. Use the existing [command-line workflow](references/uml-and-layout.md#portable-build-and-visual-check) when rendered asset files are needed and native export is unavailable. Native standalone compilation needs a self-contained source. Installing a toolchain is outside an ordinary diagram request.
-
-Check compilation diagnostics, missing glyphs and overfull boxes. Render and inspect the entire diagram at its intended size, then enlarge dense areas. Verify notation, arrowheads, complete text, labels, borders, connectors and clipping. Correct the source and re-render after changes; compilation alone is not a layout check.
-
-In Vault, follow its guide: keep feature assets in `features/assets/<feature-id>/`, task-only assets in that task's `assets/`, and existing media at their current paths. Embed the SVG/PNG using a relative Markdown image link and retain the `.tex` source beside it. Do not turn the Markdown document into a LaTeX report.
-
-Report source and preview paths, actual compile/render checks and limitations. If compilation, export or inspection is unavailable, preserve the source and label the missing scope unverified rather than claiming a checked image.
+Report source and preview paths, actual checks and limitations. If compilation, export or inspection is unavailable, retain the source and mark that scope unverified.

@@ -1,18 +1,15 @@
 # Dotfiles
 
-Personal agent instructions and reusable skills, deployed with
+Agent instructions and the UML diagram skill for Vault, deployed with
 [chezmoi](https://www.chezmoi.io/).
 
 Edit [AGENTS.md](AGENTS.md) for shared defaults and the packages under
 [skills/](skills/) for task-specific guidance. The instruction content remains
 provider-neutral; the files under [home/](home/) adapt it to local agent paths.
 
-- [C++ Style](skills/cpp-style/SKILL.md): C++ Core Guidelines, pointer and lifetime rules, and 48 Clean Code references.
-- [Canon TDD](skills/canon-tdd/SKILL.md): scenario-driven test-first development.
-- [Writing Style](skills/writing-style/SKILL.md): clear, direct prose that preserves meaning.
-- [Document Writing](skills/doc-writing/SKILL.md): high-level explanations with a clear narrative and the detail the reader needs.
 - [UML Diagrams](skills/uml-diagrams/SKILL.md): seven common UML views, scenario-based selection and one canonical theme, with editable TikZ sources and rendered Markdown previews.
-- [Vault Documentation Style](skills/vault-doc-style/SKILL.md): Vault's formal, concise documentation style, with metadata, change states and historical records preserved.
+
+Writing and document-structure rules live in Vault's [writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md), required by its `AGENTS.md`.
 
 ## What chezmoi manages
 
