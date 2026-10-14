@@ -3,7 +3,7 @@
 Agent instructions and the UML diagram skill for Vault, deployed with
 [chezmoi](https://www.chezmoi.io/).
 
-Edit [dot_codex/AGENTS.md](dot_codex/AGENTS.md) for shared defaults and the
+Edit [dot_agents/AGENTS.md](dot_agents/AGENTS.md) for shared defaults and the
 packages under [dot_agents/skills/](dot_agents/skills/) for task-specific guidance.
 The instruction content remains provider-neutral. Chezmoi maps the `dot_`
 directories directly to dot directories in your home.
@@ -16,9 +16,10 @@ Writing and document-structure rules live in Vault's [writing guide](https://git
 
 | Global target | Repository source or link target |
 |---------------|----------------------------------|
-| `~/.codex/AGENTS.md` | File copied from `dot_codex/AGENTS.md` |
+| `~/.agents/AGENTS.md` | File copied from `dot_agents/AGENTS.md` |
 | `~/.agents/skills/<name>/` | Package copied from `dot_agents/skills/<name>/` |
-| `~/.claude/CLAUDE.md` | Link to `~/.codex/AGENTS.md` |
+| `~/.codex/AGENTS.md` | Link to `~/.agents/AGENTS.md` |
+| `~/.claude/CLAUDE.md` | Link to `~/.agents/AGENTS.md` |
 | `~/.claude/skills/<name>` | Link to `~/.agents/skills/<name>` |
 
 All managed instructions and skills are installed at user-global locations and
@@ -28,7 +29,9 @@ and global skills under
 [`~/.agents/skills/`](https://learn.chatgpt.com/docs/build-skills).
 Each skill has its own folder containing `SKILL.md` and any supporting files.
 
-Claude reuses those installed files through links. The skill directories preserve
+All shared content lives under `dot_agents/`. Codex and Claude reuse the installed
+instructions through links at their required discovery paths; `~/.agents/AGENTS.md`
+alone is not a Codex instruction-discovery location. The skill directories preserve
 unmanaged entries, including Claude's `synced/` folder. `.chezmoiignore` excludes
 this README from deployment.
 
@@ -40,15 +43,17 @@ outside this repository.
 ```text
 .chezmoi.toml.tmpl           # Remembers this machine's checkout location
 .chezmoiignore              # Excludes repository-only files
+dot_agents/
+  AGENTS.md                 # Shared global instructions
+  skills/
+    uml-diagrams/           # Installed as ~/.agents/skills/uml-diagrams/
+      SKILL.md
+      assets/
+      references/
 dot_codex/
-  AGENTS.md                 # Installed as ~/.codex/AGENTS.md
-dot_agents/skills/
-  uml-diagrams/             # Installed as ~/.agents/skills/uml-diagrams/
-    SKILL.md
-    assets/
-    references/
+  symlink_AGENTS.md.tmpl     # Links to ~/.agents/AGENTS.md
 dot_claude/
-  symlink_CLAUDE.md.tmpl     # Links to ~/.codex/AGENTS.md
+  symlink_CLAUDE.md.tmpl     # Links to ~/.agents/AGENTS.md
   skills/
     symlink_uml-diagrams.tmpl # Links to the installed global skill
 ```
@@ -75,8 +80,8 @@ chezmoi verify
 
 No GitHub login is needed to clone the public repository. By default, chezmoi
 keeps the checkout at `~/.local/share/chezmoi` for future updates. The installed
-instructions and skills are regular files; Claude's links point to those installed
-files, so they do not depend on the checkout location.
+shared instructions and skills are regular files; Codex's and Claude's instruction
+links point to those installed files, so they do not depend on the checkout location.
 Install the agent applications and any diagram tools separately.
 
 If the computer already has instructions at one of the managed paths, run
@@ -107,7 +112,7 @@ chezmoi verify
 
 ## Make changes
 
-Edit `dot_codex/AGENTS.md` or the skill files under `dot_agents/skills/`, then run
+Edit `dot_agents/AGENTS.md` or the skill files under `dot_agents/skills/`, then run
 `chezmoi diff`, `chezmoi apply`, and `chezmoi verify`. Each agent controls when it
 reloads instructions.
 
