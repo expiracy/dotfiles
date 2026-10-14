@@ -10,8 +10,6 @@ directories directly to dot directories in your home.
 
 - [C++ Style](dot_agents/skills/cpp-style/SKILL.md): C++ Core Guidelines, pointer and lifetime rules, and 48 Clean Code references.
 - [Canon TDD](dot_agents/skills/canon-tdd/SKILL.md): scenario-driven test-first development.
-- [Writing Style](dot_agents/skills/writing-style/SKILL.md): clear, direct prose that preserves meaning.
-- [Document Writing](dot_agents/skills/doc-writing/SKILL.md): high-level explanations with a clear narrative and the detail the reader needs.
 - [UML Diagrams](dot_agents/skills/uml-diagrams/SKILL.md): seven common UML views, scenario-based selection and one canonical theme, with editable TikZ sources and rendered Markdown previews.
 
 Vault also has project-specific documentation rules in its [writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md), required by its `AGENTS.md`.
@@ -39,6 +37,9 @@ alone is not a Codex instruction-discovery location. The skill directories prese
 unmanaged entries, including Claude's `synced/` folder. `.chezmoiignore` excludes
 this README from deployment.
 
+`.chezmoiremove` removes the retired `writing-style` and `doc-writing` installations
+when existing computers apply this configuration.
+
 Codex's settings file is `~/.codex/config.toml`; it is currently managed locally,
 outside this repository.
 
@@ -47,14 +48,13 @@ outside this repository.
 ```text
 .chezmoi.toml.tmpl           # Remembers this machine's checkout location
 .chezmoiignore              # Excludes repository-only files
+.chezmoiremove              # Removes retired writing skill installations
 dot_agents/
   AGENTS.md                 # Shared global instructions
   skills/
     canon-tdd/
     cpp-style/
-    doc-writing/
-    uml-diagrams/
-    writing-style/          # Each package installs under ~/.agents/skills/
+    uml-diagrams/           # Each package installs under ~/.agents/skills/
 dot_codex/
   symlink_AGENTS.md.tmpl     # Links to ~/.agents/AGENTS.md
 dot_claude/
