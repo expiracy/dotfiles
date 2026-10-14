@@ -3,47 +3,57 @@
 Agent instructions and the UML diagram skill for Vault, deployed with
 [chezmoi](https://www.chezmoi.io/).
 
-Edit [AGENTS.md](AGENTS.md) for shared defaults and the packages under
-[skills/](skills/) for task-specific guidance. The instruction content remains
-provider-neutral; the files under [home/](home/) adapt it to local agent paths.
+Edit [dot_codex/AGENTS.md](dot_codex/AGENTS.md) for shared defaults and the
+packages under [dot_agents/skills/](dot_agents/skills/) for task-specific guidance.
+The instruction content remains provider-neutral. Chezmoi maps the `dot_`
+directories directly to dot directories in your home.
 
-- [UML Diagrams](skills/uml-diagrams/SKILL.md): seven common UML views, scenario-based selection and one canonical theme, with editable TikZ sources and rendered Markdown previews.
+- [UML Diagrams](dot_agents/skills/uml-diagrams/SKILL.md): seven common UML views, scenario-based selection and one canonical theme, with editable TikZ sources and rendered Markdown previews.
 
 Writing and document-structure rules live in Vault's [writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md), required by its `AGENTS.md`.
 
 ## What chezmoi manages
 
-| Target | Shared source |
-|--------|---------------|
-| `~/.claude/CLAUDE.md` | `AGENTS.md` |
-| `~/.codex/AGENTS.md` | `AGENTS.md` |
-| `~/.claude/skills/<name>` | `skills/<name>` |
-| `~/.agents/skills/<name>` | `skills/<name>` |
+| Global target | Repository source or link target |
+|---------------|----------------------------------|
+| `~/.codex/AGENTS.md` | File copied from `dot_codex/AGENTS.md` |
+| `~/.agents/skills/<name>/` | Package copied from `dot_agents/skills/<name>/` |
+| `~/.claude/CLAUDE.md` | Link to `~/.codex/AGENTS.md` |
+| `~/.claude/skills/<name>` | Link to `~/.agents/skills/<name>` |
 
-Each target is a symbolic link. Templates derive the target from chezmoi's
-working-tree path, so links work from an existing checkout or a fresh clone.
+All managed instructions and skills are installed at user-global locations and
+apply across projects. Codex discovers global instructions at
+[`~/.codex/AGENTS.md`](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
+and global skills under
+[`~/.agents/skills/`](https://learn.chatgpt.com/docs/build-skills).
+Each skill has its own folder containing `SKILL.md` and any supporting files.
 
-The skill directories are regular containers with a link for each managed skill.
-Existing entries, including Claude's `synced/` folder, are preserved. The
-`.chezmoiroot` file selects `home/` as the deployment source, keeping the canonical
-instructions, skill packages, and this README out of home-directory deployment.
-See [source-root configuration](https://www.chezmoi.io/reference/special-files/chezmoiroot/)
-and [symlink source attributes](https://www.chezmoi.io/reference/source-state-attributes/).
+Claude reuses those installed files through links. The skill directories preserve
+unmanaged entries, including Claude's `synced/` folder. `.chezmoiignore` excludes
+this README from deployment.
+
+Codex's settings file is `~/.codex/config.toml`; it is currently managed locally,
+outside this repository.
 
 ## Repository layout
 
 ```text
-.chezmoiroot                 # Selects home/ as the chezmoi source state
-AGENTS.md                    # Canonical shared instructions
-skills/                     # Canonical skill packages and supporting files
-home/
-  .chezmoi.toml.tmpl         # Remembers this machine's checkout location
-  dot_agents/skills/        # Shared skill links
-  dot_claude/               # Claude instruction and skill links
-  dot_codex/                # Codex instruction link
+.chezmoi.toml.tmpl           # Remembers this machine's checkout location
+.chezmoiignore              # Excludes repository-only files
+dot_codex/
+  AGENTS.md                 # Installed as ~/.codex/AGENTS.md
+dot_agents/skills/
+  uml-diagrams/             # Installed as ~/.agents/skills/uml-diagrams/
+    SKILL.md
+    assets/
+    references/
+dot_claude/
+  symlink_CLAUDE.md.tmpl     # Links to ~/.codex/AGENTS.md
+  skills/
+    symlink_uml-diagrams.tmpl # Links to the installed global skill
 ```
 
-Add future home-directory configuration under `home/`, using chezmoi's
+Add future home-directory configuration directly at the repository root, using chezmoi's
 [source attributes](https://www.chezmoi.io/reference/source-state-attributes/)
 such as `dot_` for a leading dot and `symlink_` for a symbolic link.
 
@@ -64,8 +74,9 @@ chezmoi verify
 ```
 
 No GitHub login is needed to clone the public repository. By default, chezmoi
-keeps the checkout at `~/.local/share/chezmoi`. Keep that checkout: the deployed
-links read its files directly, so do not use `--purge` or delete it after setup.
+keeps the checkout at `~/.local/share/chezmoi` for future updates. The installed
+instructions and skills are regular files; Claude's links point to those installed
+files, so they do not depend on the checkout location.
 Install the agent applications and any diagram tools separately.
 
 If the computer already has instructions at one of the managed paths, run
@@ -96,15 +107,19 @@ chezmoi verify
 
 ## Make changes
 
-Edit the canonical `AGENTS.md` or skill files in this repository. Existing links
-read those files directly; each agent controls when it reloads instructions.
-When adding a skill, add its one-line symlink templates under both
-`home/dot_agents/skills/` and `home/dot_claude/skills/`, then review `chezmoi diff`
-and apply the new links.
+Edit `dot_codex/AGENTS.md` or the skill files under `dot_agents/skills/`, then run
+`chezmoi diff`, `chezmoi apply`, and `chezmoi verify`. Each agent controls when it
+reloads instructions.
 
-If the checkout moves, initialise chezmoi with the new source path and apply again
-to update the links. Keep unrelated local instructions and skills outside this
-managed set.
+To add a global skill, create `dot_agents/skills/<name>/SKILL.md` and any supporting
+files. To expose it to Claude too, add `dot_claude/skills/symlink_<name>.tmpl` with:
+
+```text
+{{ joinPath .chezmoi.destDir ".agents" "skills" "<name>" }}
+```
+
+If the checkout moves, initialise chezmoi with the new source path. Keep unrelated
+local instructions and skills outside this managed set.
 
 These Claude paths configure local Claude Code. Cowork and cloud sessions use
 different skill-loading mechanisms and may skip local symlinked instructions.
