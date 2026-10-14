@@ -1,6 +1,6 @@
 # Dotfiles
 
-Agent instructions and the UML diagram skill for Vault, deployed with
+Shared agent instructions and reusable skills, deployed with
 [chezmoi](https://www.chezmoi.io/).
 
 Edit [dot_agents/AGENTS.md](dot_agents/AGENTS.md) for shared defaults and the
@@ -8,9 +8,13 @@ packages under [dot_agents/skills/](dot_agents/skills/) for task-specific guidan
 The instruction content remains provider-neutral. Chezmoi maps the `dot_`
 directories directly to dot directories in your home.
 
+- [C++ Style](dot_agents/skills/cpp-style/SKILL.md): C++ Core Guidelines, pointer and lifetime rules, and 48 Clean Code references.
+- [Canon TDD](dot_agents/skills/canon-tdd/SKILL.md): scenario-driven test-first development.
+- [Writing Style](dot_agents/skills/writing-style/SKILL.md): clear, direct prose that preserves meaning.
+- [Document Writing](dot_agents/skills/doc-writing/SKILL.md): high-level explanations with a clear narrative and the detail the reader needs.
 - [UML Diagrams](dot_agents/skills/uml-diagrams/SKILL.md): seven common UML views, scenario-based selection and one canonical theme, with editable TikZ sources and rendered Markdown previews.
 
-Writing and document-structure rules live in Vault's [writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md), required by its `AGENTS.md`.
+Vault also has project-specific documentation rules in its [writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md), required by its `AGENTS.md`.
 
 ## What chezmoi manages
 
@@ -46,16 +50,17 @@ outside this repository.
 dot_agents/
   AGENTS.md                 # Shared global instructions
   skills/
-    uml-diagrams/           # Installed as ~/.agents/skills/uml-diagrams/
-      SKILL.md
-      assets/
-      references/
+    canon-tdd/
+    cpp-style/
+    doc-writing/
+    uml-diagrams/
+    writing-style/          # Each package installs under ~/.agents/skills/
 dot_codex/
   symlink_AGENTS.md.tmpl     # Links to ~/.agents/AGENTS.md
 dot_claude/
   symlink_CLAUDE.md.tmpl     # Links to ~/.agents/AGENTS.md
   skills/
-    symlink_uml-diagrams.tmpl # Links to the installed global skill
+    symlink_<name>.tmpl      # One link per installed global skill
 ```
 
 Add future home-directory configuration directly at the repository root, using chezmoi's
