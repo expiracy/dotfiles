@@ -30,13 +30,47 @@ instructions, skill packages, and this README out of home-directory deployment.
 See [source-root configuration](https://www.chezmoi.io/reference/special-files/chezmoiroot/)
 and [symlink source attributes](https://www.chezmoi.io/reference/source-state-attributes/).
 
-## Set up
+## Repository layout
 
-On a new machine with chezmoi installed:
+```text
+.chezmoiroot                 # Selects home/ as the chezmoi source state
+AGENTS.md                    # Canonical shared instructions
+skills/                     # Canonical skill packages and supporting files
+home/
+  .chezmoi.toml.tmpl         # Remembers this machine's checkout location
+  dot_agents/skills/        # Shared skill links
+  dot_claude/               # Claude instruction and skill links
+  dot_codex/                # Codex instruction link
+```
+
+Add future home-directory configuration under `home/`, using chezmoi's
+[source attributes](https://www.chezmoi.io/reference/source-state-attributes/)
+such as `dot_` for a leading dot and `symlink_` for a symbolic link.
+
+## Set up a new computer
+
+Install Git and [chezmoi](https://www.chezmoi.io/install/) and ensure both are on
+your command path. On macOS with Homebrew already installed:
+
+```sh
+brew install chezmoi
+```
+
+Then clone and apply the public repository:
 
 ```sh
 chezmoi init --apply expiracy/dotfiles
+chezmoi verify
 ```
+
+No GitHub login is needed to clone the public repository. By default, chezmoi
+keeps the checkout at `~/.local/share/chezmoi`. Keep that checkout: the deployed
+links read its files directly, so do not use `--purge` or delete it after setup.
+Install the agent applications and any diagram tools separately.
+
+If the computer already has instructions at one of the managed paths, run
+`chezmoi init expiracy/dotfiles`, inspect `chezmoi diff`, then run `chezmoi apply`
+and `chezmoi verify`.
 
 To use an existing checkout:
 
@@ -49,6 +83,16 @@ chezmoi verify
 
 The configuration template remembers the checkout location, so later commands
 can use `chezmoi diff`, `chezmoi apply`, and `chezmoi verify` directly.
+
+## Update another computer
+
+After committing and pushing changes to this repository, pull and apply them on
+each other computer:
+
+```sh
+chezmoi update
+chezmoi verify
+```
 
 ## Make changes
 
