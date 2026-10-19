@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Personal development and documentation plugins.",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
@@ -19,9 +19,9 @@
       "description": "Scenario-driven Canon TDD for implementing features and fixing bugs."
     },
     {
-      "name": "doc-diagrams",
-      "source": "./dot_agents/plugins/doc-diagrams",
-      "description": "Consistent LaTeX/TikZ UML diagrams with editable sources and checked rendered previews."
+      "name": "doc-writing",
+      "source": "./dot_agents/plugins/doc-writing",
+      "description": "Clear prose and explanatory documents, with consistent LaTeX/TikZ UML diagrams."
     }
   ]
 }

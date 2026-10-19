@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "doc-diagrams",
+  "name": "doc-writing",
   "version": "1.0.0",
-  "description": "Consistent LaTeX/TikZ UML diagrams with editable sources and checked rendered previews.",
+  "description": "Clear prose and explanatory documents, with consistent LaTeX/TikZ UML diagrams.",
   "author": {
     "name": "James Gray"
   },

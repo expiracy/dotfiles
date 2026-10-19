@@ -29,10 +29,10 @@
       "category": "Productivity"
     },
     {
-      "name": "doc-diagrams",
+      "name": "doc-writing",
       "source": {
         "source": "local",
-        "path": "./dot_agents/plugins/doc-diagrams"
+        "path": "./dot_agents/plugins/doc-writing"
       },
       "policy": {
         "installation": "AVAILABLE",

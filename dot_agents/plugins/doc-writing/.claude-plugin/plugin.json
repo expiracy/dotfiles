@@ -1,0 +1,9 @@
+{
+  "name": "doc-writing",
+  "version": "1.0.0",
+  "description": "Clear prose and explanatory documents, with consistent LaTeX/TikZ UML diagrams.",
+  "author": {
+    "name": "James Gray"
+  },
+  "repository": "https://github.com/expiracy/dotfiles"
+}

@@ -3,19 +3,20 @@
 Shared agent instructions managed with [chezmoi](https://www.chezmoi.io/) and
 three independently installable, skills-only plugins.
 
-| Plugin | Included skill | Purpose |
+| Plugin | Included skills | Purpose |
 |--------|----------------|---------|
 | [cpp-dev](dot_agents/plugins/cpp-dev/) | [cpp-style](dot_agents/plugins/cpp-dev/skills/cpp-style/SKILL.md) | Clean Code, C++ Core Guidelines, pointer contracts and lifetimes |
 | [dev-workflow](dot_agents/plugins/dev-workflow/) | [canon-tdd](dot_agents/plugins/dev-workflow/skills/canon-tdd/SKILL.md) | Scenario-driven Canon TDD |
-| [doc-diagrams](dot_agents/plugins/doc-diagrams/) | [uml-diagrams](dot_agents/plugins/doc-diagrams/skills/uml-diagrams/SKILL.md) | Consistent UML diagrams using LaTeX/TikZ |
+| [doc-writing](dot_agents/plugins/doc-writing/) | [text-writing](dot_agents/plugins/doc-writing/skills/text-writing/SKILL.md), [uml-diagrams](dot_agents/plugins/doc-writing/skills/uml-diagrams/SKILL.md) | Clear prose, high-level explanatory narratives, and consistent UML diagrams |
 
 Skill instructions remain provider-neutral. Each package has a portable
 [Agent Plugins manifest](https://developers.openai.com/plugins/build/plugins),
 Codex and Claude compatibility manifests, and its own `skills/` directory.
 Supporting references, templates and licences stay inside the relevant package.
 
-The retired `writing-style` and `doc-writing` skills are not included. Vault's
-project-specific writing rules remain in its
+The old loose `writing-style` and `doc-writing` skills remain retired. Prose
+guidance now lives in the `text-writing` skill inside the `doc-writing` plugin.
+Vault's project-specific writing rules remain in its
 [writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md).
 
 ## Repository layout
@@ -26,11 +27,13 @@ dot_agents/
   plugins/
     cpp-dev/
     dev-workflow/
-    doc-diagrams/
+    doc-writing/
       plugin.json                 # Portable package identity
       .codex-plugin/plugin.json   # Codex compatibility
       .claude-plugin/plugin.json  # Claude compatibility
-      skills/uml-diagrams/        # Instructions, references and assets
+      skills/
+        text-writing/SKILL.md     # Prose and explanatory narrative guidance
+        uml-diagrams/            # Instructions, references and assets
 .agents/plugins/marketplace.json # Codex marketplace catalog
 .claude-plugin/marketplace.json   # Claude marketplace catalog
 dot_codex/symlink_AGENTS.md.tmpl
@@ -62,7 +65,7 @@ Install whichever plugins you want at user scope. Use either or both clients.
 codex plugin marketplace add expiracy/dotfiles
 codex plugin add cpp-dev@expiracy-dotfiles
 codex plugin add dev-workflow@expiracy-dotfiles
-codex plugin add doc-diagrams@expiracy-dotfiles
+codex plugin add doc-writing@expiracy-dotfiles
 ```
 
 ### Claude Code
@@ -71,7 +74,7 @@ codex plugin add doc-diagrams@expiracy-dotfiles
 claude plugin marketplace add expiracy/dotfiles
 claude plugin install --scope user cpp-dev@expiracy-dotfiles
 claude plugin install --scope user dev-workflow@expiracy-dotfiles
-claude plugin install --scope user doc-diagrams@expiracy-dotfiles
+claude plugin install --scope user doc-writing@expiracy-dotfiles
 ```
 
 After installing plugins, apply and verify the shared instructions:
@@ -102,6 +105,10 @@ These remain user-global defaults across projects. Codex discovers instructions
 at its [documented global path](https://learn.chatgpt.com/docs/agent-configuration/agents-md);
 `~/.agents/AGENTS.md` is the shared file behind the host links.
 
+Global instructions keep the development defaults and skill-selection guidance.
+Prose, narrative, and diagram-specific rules live in the `doc-writing` plugin's
+skills, so they load when the task calls for them.
+
 The plugin managers install and enable plugins globally for your user. Chezmoi
 excludes the plugin source tree from home-directory copying and removes the old
 loose skill installations through `.chezmoiremove`, avoiding duplicate discovery.
@@ -131,6 +138,18 @@ and install the desired version with `codex plugin add <name>@expiracy-dotfiles`
 Claude can refresh with `claude plugin marketplace update expiracy-dotfiles`
 and update a package with `claude plugin update <name>@expiracy-dotfiles`.
 Then run `chezmoi diff`, `chezmoi apply` and `chezmoi verify`, and restart the clients.
+
+When migrating from `doc-diagrams`, install `doc-writing@expiracy-dotfiles` first,
+then remove the old plugin:
+
+```sh
+codex plugin remove doc-diagrams@expiracy-dotfiles
+claude plugin uninstall --scope user doc-diagrams@expiracy-dotfiles
+```
+
+Use the command for each client you configured. The new plugin preserves the UML
+skill and adds `text-writing`; applying chezmoi moves the corresponding guidance
+out of the global instruction file.
 
 Plugin packaging does not install a C++ or LaTeX toolchain. Each host controls
 plugin loading and available tools; these instructions do not grant tool access.

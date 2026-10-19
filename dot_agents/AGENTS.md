@@ -3,16 +3,6 @@
 These are personal defaults for use as global agent instructions. Follow explicit
 task requirements and the instructions of the project being worked on.
 
-## Communication and documents
-
-Write clear, direct English. Lead with the main point and use concrete language.
-Keep facts, conditions, uncertainty, and important limitations intact.
-
-For explanatory documents, describe the big picture through a connected narrative:
-the need, the approach, its implications, and any next step. Include technical
-detail when it helps the intended reader understand or decide. Preserve required
-detail in specifications, references, and procedures.
-
 ## Development
 
 Make the smallest complete change that solves the requested problem. Follow the
@@ -21,12 +11,6 @@ policy. Avoid unrelated cleanup and speculative abstractions.
 
 Run meaningful project checks and report actual results; do not present unrun
 checks as verified.
-
-## Diagrams
-
-For TikZ diagrams, apply `uml-diagrams`: reuse a consistent theme, preserve the
-requested relationships, and check the rendered diagram for readable text,
-unintended overlaps, unclear connectors, and clipping.
 
 ## Skills
 
