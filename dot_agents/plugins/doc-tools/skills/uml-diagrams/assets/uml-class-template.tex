@@ -18,6 +18,10 @@
     rectangle split part fill={umlHeader,white,white},
     rectangle split part align={center,left,left},
     text width=42mm,align=center},
+  uml/object/.style={uml/base,rectangle split,rectangle split parts=2,
+    rectangle split ignore empty parts=false,
+    rectangle split part fill={umlHeader,white},
+    rectangle split part align={center,left},text width=42mm,align=center},
   uml/component/.style={uml/base,rectangle,fill=umlHeader,text width=42mm,align=center},
   uml/note/.style={uml/base,rectangle,draw=none,fill=none,
     text width=83mm,align=left,inner ysep=4mm,
@@ -37,6 +41,7 @@
     inner sep=1.5pt,fill=white},
   uml/edge/.style={draw=umlInk,line width=0.65pt},
   uml/association/.style={uml/edge},
+  uml/link/.style={uml/association},
   uml/dependency/.style={uml/edge,dashed,-{Straight Barb[length=3mm,width=2mm]}},
   uml/generalization/.style={uml/edge,-{Triangle[open,length=3.2mm,width=3.2mm]}},
   uml/realization/.style={uml/generalization,dashed},
@@ -47,14 +52,10 @@
   uml/call/.style={uml/edge,-{Triangle[length=3mm,width=2.2mm]}},
   uml/async/.style={uml/edge,-{Straight Barb[length=3mm,width=2mm]}},
   uml/reply/.style={uml/edge,dashed,-{Straight Barb[length=3mm,width=2mm]}},
-  uml/artifact/.style={uml/base,rectangle,fill=white,text width=32mm,align=center},
   uml/frame/.style={uml/base,rectangle,fill=none,inner sep=7mm},
   uml/port/.style={uml/base,rectangle,fill=white,minimum size=3mm,inner sep=0pt},
   uml/interface/.style={uml/base,circle,fill=white,minimum size=4mm,inner sep=0pt},
-  uml/usecase/.style={uml/base,ellipse,fill=umlHeader,text width=32mm,align=center},
   uml/action/.style={uml/base,rectangle,rounded corners=2mm,
-    fill=umlHeader,text width=32mm,align=center},
-  uml/state/.style={uml/base,rectangle,rounded corners=2mm,
     fill=umlHeader,text width=32mm,align=center},
   uml/decision/.style={uml/base,diamond,fill=white,aspect=1.4,
     minimum size=8mm,inner sep=1pt},
@@ -76,18 +77,7 @@
   uml/activation/.style={uml/base,rectangle,fill=umlHeader,
     minimum width=3mm,minimum height=12mm,inner sep=0pt},
   uml/control-flow/.style={uml/edge,-{Straight Barb[length=3mm,width=2mm]}},
-  uml/object-flow/.style={uml/control-flow},
-  uml/transition/.style={uml/control-flow},
-  pics/uml/actor/.style={code={
-    \draw[uml/edge,fill=white] (0,0.42) circle[radius=1.3mm];
-    \draw[uml/edge] (0,0.29) -- (0,-0.22)
-      (-0.28,0.14) -- (0.28,0.14)
-      (0,-0.22) -- (-0.24,-0.53) (0,-0.22) -- (0.24,-0.53);
-    \coordinate (-north) at (0,0.55);
-    \coordinate (-south) at (0,-0.53);
-    \coordinate (-west) at (-0.3,0);
-    \coordinate (-east) at (0.3,0);
-  }}
+  uml/object-flow/.style={uml/control-flow}
 }
 
 \begin{document}

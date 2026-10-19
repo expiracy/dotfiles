@@ -4,41 +4,60 @@ Reuse the shared preamble and `uml/` styles in the template for every diagram ty
 
 ## Diagram types
 
-These are the supported UML views for ordinary software documentation. The skill's scenario table selects the view; this table specifies its notation. Consult UML 2.5.1 for specialised constructs within these views.
+Use the skill's five-view menu for ordinary software documentation. This table
+gives the corresponding notation without introducing additional diagram types.
 
 | Type | Required distinction and canonical primitives |
 |------|-----------------------------------------------|
 | Sequence | Lifelines, ordered messages, executions and fragments; `uml/lifeline-head`, `uml/lifeline`, call/reply styles, `uml/activation`, frame geometry. |
-| Activity | Actions, flows, decisions, concurrency and finals; `uml/action`, `uml/control-flow`, `uml/decision`, `uml/bar`, final styles. |
-| State machine | States and event-driven transitions; `uml/state`, `uml/transition`, initial/final nodes. |
+| Object | Concrete instances, slot values and links at one moment; `uml/object`, underlined `name : Type` headings, `uml/link`. |
 | Class | Classifiers, compartments and typed relationships; `uml/class`. |
-| Component | Components and their interfaces/dependencies; `uml/component` with the component keyword or icon. |
-| Deployment | Perspective node cubes, artifacts and deployment; themed edges and `uml/artifact`. |
-| Use case | Actor roles, named ellipses and subject boundary; `uml/actor` pic, `uml/usecase`, `uml/frame`. |
+| Architecture (component view) | High-level components and interfaces/dependencies; `uml/component` with the component keyword or icon when using formal UML. |
+| Activity/workflow | Actions, flows, decisions, concurrency and finals; `uml/action`, `uml/control-flow`, `uml/decision`, `uml/bar`, final styles. |
 
 Source: [OMG UML 2.5.1](https://www.omg.org/spec/UML/2.5.1/PDF).
 
-## Deployment
+## Objects: an instance snapshot
 
-Deployment nodes are perspective cubes, labelled with the applicable device or execution-environment keyword. Artifacts can be keyword-labelled rectangles or document icons. Nest them within their deployment target, or draw an explicit dashed/open deploy dependency from artifact to target. Communication paths between nodes are solid associations; a manifest dependency points from artifact to its manifested classifier/component.
+An object diagram shows specific instances at one moment, not the design of their
+types. Use `uml/object` with two compartments: an underlined `name : Type` heading
+and relevant slots such as `status = paid`. An anonymous instance can use `: Type`.
+Do not add an operations compartment or replace actual values with type declarations.
 
-Source: UML 2.5.1 §§19.2.4–19.4.4.
+Use solid `uml/link` connections between instances, with supplied role names.
+Links must agree with any supplied class model. Do not invent missing instances,
+slot values or ownership. Label illustrative snapshots as examples.
 
-## Use cases, activities and state machines
+```tex
+\node[uml/object] (order) {
+  \underline{order1 : Order}
+  \nodepart[align=left]{two}status = paid
+};
+\node[uml/object,right=20mm of order] (customer) {
+  \underline{customer1 : Customer}
+  \nodepart[align=left]{two}name = ``Alice''
+};
+\draw[uml/link] (order.east) --
+  node[uml/label,midway,above=2pt] {customer} (customer.west);
+```
 
-Use an actor stick figure (`\pic (user) {uml/actor};`) or actor-keyword rectangle. The pic exposes `user-north`, `user-south`, `user-east` and `user-west` coordinates; position its text label separately. Use-case names belong inside ellipses. Actor associations are solid; include points from base to included use case, and extend from extending to extended use case, both dashed/open with their keywords. These relationships do not express execution order.
+Sources: UML 2.5.1 §9.8 and [IBM's instance notation](https://developer.ibm.com/articles/the-class-diagram/#instances).
+
+## Activities: a workflow
 
 Activities use rounded actions, rectangular object nodes/pins, decision/merge diamonds and fork/join bars. `uml/control-flow` and `uml/object-flow` have solid open heads. Label decision guards `[condition]`; decisions select alternatives while forks create concurrent flows. `uml/initial` is a filled circle; `uml/activity-final` is a bull's-eye stopping all flows; `uml/flow-final` is a circled X terminating only that flow.
 
-State-machine transitions use `trigger [guard] / effect`; rounded state nodes may have entry/do/exit behaviour. A final bull's-eye completes its enclosing region. Nested states and dashed region dividers express hierarchy and concurrency. An initial node, state and activity action may share visual primitives but retain different semantics.
+Keep the workflow focused on the requested process. Start with actions, guarded
+choices and a clear end; add concurrency only when the process requires it.
 
-Sources: UML 2.5.1 §§14.2.4, 15.2.4–15.3.4 and 18.1.4.
+Source: UML 2.5.1 §§15.2.4–15.3.4.
 
 ## Relationship direction and meaning
 
 | Relationship | Template style | Meaning and direction |
 |--------------|----------------|-----------------------|
 | Association | `uml/association` | Solid line; add navigability only when specified. |
+| Object link | `uml/link` | Solid line between concrete instances; preserve any supplied role names. |
 | Dependency | `uml/dependency` | Dashed line and open barb, from client to supplier. |
 | Generalization | `uml/generalization` | Solid line and hollow triangle, from child to parent. |
 | Interface realization | `uml/realization` | Dashed line and hollow triangle, from implementation to interface. |
@@ -46,7 +65,6 @@ Sources: UML 2.5.1 §§14.2.4, 15.2.4–15.3.4 and 18.1.4.
 | Composition | `uml/composition` | Filled diamond at the whole end; composition expresses stronger whole/part semantics. |
 | Annotation | `uml/note-link` | Dashed connector without an arrowhead; formal comments use the folded-corner `uml/note`. |
 | Activity control/object flow | `uml/control-flow` / `uml/object-flow` | Solid open-head flow with the supplied guard/token meaning. |
-| State transition | `uml/transition` | Solid open head; label with trigger, guard and effect when supplied. |
 
 The template's aggregation and composition styles put the diamond at the start
 of the path: draw from the whole toward the part. Draw generalizations and
@@ -113,14 +131,23 @@ Sources: [Positioning and labels](https://tikz.dev/tikz-shapes),
 [path bends](https://tikz.dev/tikz-paths), [fit](https://tikz.dev/library-fit),
 and [background layers](https://tikz.dev/library-backgrounds).
 
-## Components
+## Architecture: a component view
 
-For components, use `uml/component` with a visible component keyword or correct
-UML icon; do not invent an icon that suggests a different kind of entity.
+Show the main services/components, their responsibilities, and the relevant
+interfaces or dependencies at one consistent level of detail. Avoid class
+compartments, methods and low-level configuration in an architecture overview.
+
+For formal UML components, use `uml/component` with a visible component keyword
+or correct UML icon; do not invent an icon that suggests a different kind of entity.
 Use the same typography, colours, padding, and relationship conventions as the
-class diagrams. An informal block diagram should be identified as such.
+class diagrams. Label an informal block diagram as informal architecture and
+label its connections with their intended meaning. Architecture is the purpose
+of the view, not a separate formal UML diagram type; the default here is a
+component diagram. A dependency arrow does not establish runtime message order.
 
 The interface and component labels are UML keywords, not profile stereotypes. Use T1 guillemets (`\guillemotleft` / `\guillemotright`) around keywords and stereotype names.
+
+Source: [IBM's component-diagram guide](https://developer.ibm.com/articles/the-component-diagram/).
 
 ## Sequence diagrams
 

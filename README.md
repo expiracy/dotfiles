@@ -7,7 +7,7 @@ three independently installable, skills-only plugins.
 |--------|----------------|---------|
 | [cpp-dev](dot_agents/plugins/cpp-dev/) | [cpp-style](dot_agents/plugins/cpp-dev/skills/cpp-style/SKILL.md) | Clean Code, C++ Core Guidelines, pointer contracts and lifetimes |
 | [dev-workflow](dot_agents/plugins/dev-workflow/) | [canon-tdd](dot_agents/plugins/dev-workflow/skills/canon-tdd/SKILL.md) | Scenario-driven Canon TDD |
-| [doc-tools](dot_agents/plugins/doc-tools/) | [text-writing](dot_agents/plugins/doc-tools/skills/text-writing/SKILL.md), [uml-diagrams](dot_agents/plugins/doc-tools/skills/uml-diagrams/SKILL.md) | Clear prose, high-level explanatory narratives, and consistent UML diagrams |
+| [doc-tools](dot_agents/plugins/doc-tools/) | [text-writing](dot_agents/plugins/doc-tools/skills/text-writing/SKILL.md), [uml-diagrams](dot_agents/plugins/doc-tools/skills/uml-diagrams/SKILL.md) | Clear prose and focused diagrams: sequence, object, class, architecture/component, and activity/workflow |
 
 Skill instructions remain provider-neutral. Each package has a portable
 [Agent Plugins manifest](https://developers.openai.com/plugins/build/plugins),

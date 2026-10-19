@@ -1,6 +1,6 @@
 ---
 name: uml-diagrams
-description: Use when creating or editing LaTeX/TikZ UML diagrams for Markdown documentation, including sequence, activity, state machine, class, component, deployment and use case diagrams, or related software architecture views.
+description: Create or edit common software diagrams in LaTeX/TikZ for Markdown documentation. Use for sequence diagrams, object snapshots, class models, architecture/component views, and activity/workflow diagrams.
 ---
 
 # UML Diagrams
@@ -9,19 +9,26 @@ Create Markdown diagram assets: editable TikZ source, an SVG or PNG preview, and
 
 ## Choose the view
 
-Support these seven common views:
+Keep the choice to these five views. Choose from the question the reader needs
+answered; do not make the user navigate a catalogue of UML terminology.
 
 | Scenario | Diagram |
 |----------|---------|
-| Ordered messages between participants | **Sequence** |
-| Workflow steps, decisions and parallel branches | Activity |
-| One entity's states and event-driven transitions | State machine |
-| Types, fields, operations and relationships | Class |
-| Subsystems, interfaces and dependencies | Component |
-| Runtime placement on hosts and execution environments | Deployment |
-| Actors and their goals within a system boundary | Use case |
+| Who calls whom, and in what order? | **Sequence** |
+| Which concrete objects, values and links exist at one moment? | **Object** |
+| What types exist, and how do they relate? | **Class** |
+| What are the main services/components and their connections? | **Architecture** (component view) |
+| What steps, choices or parallel paths make up a process? | **Activity/workflow** |
 
-Honour an explicitly requested supported type; otherwise choose a view and briefly explain why. Draw one focused view unless several are needed. Ask when the question is unclear or the requested type is outside this set. Label informal architecture views as informal.
+Honour an explicitly requested supported type; otherwise choose one view and
+briefly explain why. Class diagrams show types; object diagrams show particular
+instances. For architecture, default to a high-level component view and omit
+class members and implementation mechanics. Label plain block views as informal
+architecture rather than formal UML.
+
+Draw one focused view unless several are needed. Ask when missing information
+would change its meaning. If a different diagram type is explicitly requested,
+identify the scope difference instead of silently substituting another view.
 
 Preserve supplied names, relationships, directions, multiplicities, message order, guards and timing. Mark illustrative assumptions; ask when missing semantics affect correctness. Do not infer ownership from pointer types or invent timing, cardinalities or failure policies.
 
