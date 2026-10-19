@@ -1,0 +1,10 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "doc-diagrams",
+  "version": "1.0.0",
+  "description": "Consistent LaTeX/TikZ UML diagrams with editable sources and checked rendered previews.",
+  "author": {
+    "name": "James Gray"
+  },
+  "repository": "https://github.com/expiracy/dotfiles"
+}

@@ -1,141 +1,136 @@
 # Dotfiles
 
-Shared agent instructions and reusable skills, deployed with
-[chezmoi](https://www.chezmoi.io/).
+Shared agent instructions managed with [chezmoi](https://www.chezmoi.io/) and
+three independently installable, skills-only plugins.
 
-Edit [dot_agents/AGENTS.md](dot_agents/AGENTS.md) for shared defaults and the
-packages under [dot_agents/skills/](dot_agents/skills/) for task-specific guidance.
-The instruction content remains provider-neutral. Chezmoi maps the `dot_`
-directories directly to dot directories in your home.
+| Plugin | Included skill | Purpose |
+|--------|----------------|---------|
+| [cpp-dev](dot_agents/plugins/cpp-dev/) | [cpp-style](dot_agents/plugins/cpp-dev/skills/cpp-style/SKILL.md) | Clean Code, C++ Core Guidelines, pointer contracts and lifetimes |
+| [dev-workflow](dot_agents/plugins/dev-workflow/) | [canon-tdd](dot_agents/plugins/dev-workflow/skills/canon-tdd/SKILL.md) | Scenario-driven Canon TDD |
+| [doc-diagrams](dot_agents/plugins/doc-diagrams/) | [uml-diagrams](dot_agents/plugins/doc-diagrams/skills/uml-diagrams/SKILL.md) | Consistent UML diagrams using LaTeX/TikZ |
 
-- [C++ Style](dot_agents/skills/cpp-style/SKILL.md): C++ Core Guidelines, pointer and lifetime rules, and 48 Clean Code references.
-- [Canon TDD](dot_agents/skills/canon-tdd/SKILL.md): scenario-driven test-first development.
-- [UML Diagrams](dot_agents/skills/uml-diagrams/SKILL.md): seven common UML views, scenario-based selection and one canonical theme, with editable TikZ sources and rendered Markdown previews.
+Skill instructions remain provider-neutral. Each package has a portable
+[Agent Plugins manifest](https://developers.openai.com/plugins/build/plugins),
+Codex and Claude compatibility manifests, and its own `skills/` directory.
+Supporting references, templates and licences stay inside the relevant package.
 
-Vault also has project-specific documentation rules in its [writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md), required by its `AGENTS.md`.
-
-## What chezmoi manages
-
-| Global target | Repository source or link target |
-|---------------|----------------------------------|
-| `~/.agents/AGENTS.md` | File copied from `dot_agents/AGENTS.md` |
-| `~/.agents/skills/<name>/` | Package copied from `dot_agents/skills/<name>/` |
-| `~/.codex/AGENTS.md` | Link to `~/.agents/AGENTS.md` |
-| `~/.claude/CLAUDE.md` | Link to `~/.agents/AGENTS.md` |
-| `~/.claude/skills/<name>` | Link to `~/.agents/skills/<name>` |
-
-All managed instructions and skills are installed at user-global locations and
-apply across projects. Codex discovers global instructions at
-[`~/.codex/AGENTS.md`](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
-and global skills under
-[`~/.agents/skills/`](https://learn.chatgpt.com/docs/build-skills).
-Each skill has its own folder containing `SKILL.md` and any supporting files.
-
-All shared content lives under `dot_agents/`. Codex and Claude reuse the installed
-instructions through links at their required discovery paths; `~/.agents/AGENTS.md`
-alone is not a Codex instruction-discovery location. The skill directories preserve
-unmanaged entries, including Claude's `synced/` folder. `.chezmoiignore` excludes
-this README from deployment.
-
-`.chezmoiremove` removes the retired `writing-style` and `doc-writing` installations
-when existing computers apply this configuration.
-
-Codex's settings file is `~/.codex/config.toml`; it is currently managed locally,
-outside this repository.
+The retired `writing-style` and `doc-writing` skills are not included. Vault's
+project-specific writing rules remain in its
+[writing guide](https://github.com/expiracy/vault/blob/master/projects/vault/guides/markdown-style.md).
 
 ## Repository layout
 
 ```text
-.chezmoi.toml.tmpl           # Remembers this machine's checkout location
-.chezmoiignore              # Excludes repository-only files
-.chezmoiremove              # Removes retired writing skill installations
 dot_agents/
-  AGENTS.md                 # Shared global instructions
-  skills/
-    canon-tdd/
-    cpp-style/
-    uml-diagrams/           # Each package installs under ~/.agents/skills/
-dot_codex/
-  symlink_AGENTS.md.tmpl     # Links to ~/.agents/AGENTS.md
-dot_claude/
-  symlink_CLAUDE.md.tmpl     # Links to ~/.agents/AGENTS.md
-  skills/
-    symlink_<name>.tmpl      # One link per installed global skill
+  AGENTS.md
+  plugins/
+    cpp-dev/
+    dev-workflow/
+    doc-diagrams/
+      plugin.json                 # Portable package identity
+      .codex-plugin/plugin.json   # Codex compatibility
+      .claude-plugin/plugin.json  # Claude compatibility
+      skills/uml-diagrams/        # Instructions, references and assets
+.agents/plugins/marketplace.json # Codex marketplace catalog
+.claude-plugin/marketplace.json   # Claude marketplace catalog
+dot_codex/symlink_AGENTS.md.tmpl
+dot_claude/symlink_CLAUDE.md.tmpl
 ```
 
-Add future home-directory configuration directly at the repository root, using chezmoi's
-[source attributes](https://www.chezmoi.io/reference/source-state-attributes/)
-such as `dot_` for a leading dot and `symlink_` for a symbolic link.
+All shared content lives under `dot_agents/`. The two catalogs list the same
+three packages as `expiracy-dotfiles`. Package paths resolve from the repository
+root. Plugins contain their resources directly, so an installed package does not
+depend on files outside its directory.
 
 ## Set up a new computer
 
-Install Git and [chezmoi](https://www.chezmoi.io/install/) and ensure both are on
-your command path. On macOS with Homebrew already installed:
+Install Git, chezmoi and the agent clients you use. On macOS with Homebrew already
+installed, `brew install chezmoi` installs chezmoi. Other platforms can follow its
+[installation guide](https://www.chezmoi.io/install/).
+
+Clone the dotfiles and generate this machine's chezmoi configuration:
 
 ```sh
-brew install chezmoi
+chezmoi init expiracy/dotfiles
 ```
 
-Then clone and apply the public repository:
+Install whichever plugins you want at user scope. Use either or both clients.
+
+### Codex
 
 ```sh
-chezmoi init --apply expiracy/dotfiles
-chezmoi verify
+codex plugin marketplace add expiracy/dotfiles
+codex plugin add cpp-dev@expiracy-dotfiles
+codex plugin add dev-workflow@expiracy-dotfiles
+codex plugin add doc-diagrams@expiracy-dotfiles
 ```
 
-No GitHub login is needed to clone the public repository. By default, chezmoi
-keeps the checkout at `~/.local/share/chezmoi` for future updates. The installed
-shared instructions and skills are regular files; Codex's and Claude's instruction
-links point to those installed files, so they do not depend on the checkout location.
-Install the agent applications and any diagram tools separately.
-
-If the computer already has instructions at one of the managed paths, run
-`chezmoi init expiracy/dotfiles`, inspect `chezmoi diff`, then run `chezmoi apply`
-and `chezmoi verify`.
-
-To use an existing checkout:
+### Claude Code
 
 ```sh
-chezmoi init --source /path/to/dotfiles
+claude plugin marketplace add expiracy/dotfiles
+claude plugin install --scope user cpp-dev@expiracy-dotfiles
+claude plugin install --scope user dev-workflow@expiracy-dotfiles
+claude plugin install --scope user doc-diagrams@expiracy-dotfiles
+```
+
+After installing plugins, apply and verify the shared instructions:
+
+```sh
 chezmoi diff
 chezmoi apply
 chezmoi verify
 ```
 
-The configuration template remembers the checkout location, so later commands
-can use `chezmoi diff`, `chezmoi apply`, and `chezmoi verify` directly.
+Restart the clients to load the installed plugins. Plugin names namespace their
+skills; for example, Claude exposes `/cpp-dev:cpp-style`.
 
-## Update another computer
+For an existing checkout, start with `chezmoi init --source /path/to/dotfiles`.
+For local plugin development, pass that checkout path to each client's
+`plugin marketplace add` command instead of the GitHub repository name.
 
-After committing and pushing changes to this repository, pull and apply them on
-each other computer:
+## Shared global instructions
+
+Chezmoi copies `dot_agents/AGENTS.md` to `~/.agents/AGENTS.md` and creates:
+
+| Global discovery path | Link target |
+|-----------------------|-------------|
+| `~/.codex/AGENTS.md` | `~/.agents/AGENTS.md` |
+| `~/.claude/CLAUDE.md` | `~/.agents/AGENTS.md` |
+
+These remain user-global defaults across projects. Codex discovers instructions
+at its [documented global path](https://learn.chatgpt.com/docs/agent-configuration/agents-md);
+`~/.agents/AGENTS.md` is the shared file behind the host links.
+
+The plugin managers install and enable plugins globally for your user. Chezmoi
+excludes the plugin source tree from home-directory copying and removes the old
+loose skill installations through `.chezmoiremove`, avoiding duplicate discovery.
+Install plugins before applying this migration on an existing computer.
+Unrelated skills and Claude's `synced/` directory are preserved.
+
+Codex settings in `~/.codex/config.toml` remain local. The plugin manager adds its
+own marketplace and enabled-plugin entries there; this repository does not
+replace the settings file. Claude's plugin manager likewise owns its local
+registry and enabled-plugin settings.
+
+## Make changes and update other computers
+
+Edit shared defaults in `dot_agents/AGENTS.md`. Edit a skill within its plugin's
+`skills/` directory. When releasing a plugin change, update its version in all
+three manifests together, then commit and push.
+
+On another computer, pull dotfile changes without applying the migration yet:
 
 ```sh
-chezmoi update
-chezmoi verify
+chezmoi update --apply=false
 ```
 
-## Make changes
+Refresh the marketplace and update the changed plugins using the client's plugin
+manager. Codex can refresh with `codex plugin marketplace upgrade expiracy-dotfiles`
+and install the desired version with `codex plugin add <name>@expiracy-dotfiles`.
+Claude can refresh with `claude plugin marketplace update expiracy-dotfiles`
+and update a package with `claude plugin update <name>@expiracy-dotfiles`.
+Then run `chezmoi diff`, `chezmoi apply` and `chezmoi verify`, and restart the clients.
 
-Edit `dot_agents/AGENTS.md` or the skill files under `dot_agents/skills/`, then run
-`chezmoi diff`, `chezmoi apply`, and `chezmoi verify`. Each agent controls when it
-reloads instructions.
-
-To add a global skill, create `dot_agents/skills/<name>/SKILL.md` and any supporting
-files. To expose it to Claude too, add `dot_claude/skills/symlink_<name>.tmpl` with:
-
-```text
-{{ joinPath .chezmoi.destDir ".agents" "skills" "<name>" }}
-```
-
-If the checkout moves, initialise chezmoi with the new source path. Keep unrelated
-local instructions and skills outside this managed set.
-
-These Claude paths configure local Claude Code. Cowork and cloud sessions use
-different skill-loading mechanisms and may skip local symlinked instructions.
-See [Claude's memory rules](https://code.claude.com/docs/en/memory) and
-[skill locations](https://code.claude.com/docs/en/skills).
-
-For other hosts, supply the same instruction content through their supported
-global-instruction and skill mechanisms. Automatic discovery and execution
-capabilities depend on the host; these files do not grant tool access.
+Plugin packaging does not install a C++ or LaTeX toolchain. Each host controls
+plugin loading and available tools; these instructions do not grant tool access.

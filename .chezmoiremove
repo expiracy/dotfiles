@@ -2,3 +2,9 @@
 .agents/skills/doc-writing
 .claude/skills/writing-style
 .claude/skills/doc-writing
+.agents/skills/cpp-style
+.claude/skills/cpp-style
+.agents/skills/canon-tdd
+.claude/skills/canon-tdd
+.agents/skills/uml-diagrams
+.claude/skills/uml-diagrams

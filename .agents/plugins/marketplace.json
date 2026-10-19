@@ -1,0 +1,44 @@
+{
+  "name": "expiracy-dotfiles",
+  "interface": {
+    "displayName": "Expiracy Dotfiles"
+  },
+  "plugins": [
+    {
+      "name": "cpp-dev",
+      "source": {
+        "source": "local",
+        "path": "./dot_agents/plugins/cpp-dev"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "dev-workflow",
+      "source": {
+        "source": "local",
+        "path": "./dot_agents/plugins/dev-workflow"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "doc-diagrams",
+      "source": {
+        "source": "local",
+        "path": "./dot_agents/plugins/doc-diagrams"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
