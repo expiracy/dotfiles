@@ -29,10 +29,10 @@
       "category": "Productivity"
     },
     {
-      "name": "doc-writing",
+      "name": "doc-tools",
       "source": {
         "source": "local",
-        "path": "./dot_agents/plugins/doc-writing"
+        "path": "./dot_agents/plugins/doc-tools"
       },
       "policy": {
         "installation": "AVAILABLE",
